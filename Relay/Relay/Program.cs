@@ -64,7 +64,7 @@ namespace MainRover
                         {
                             Console.WriteLine("motor Id" + MotorID + "data is " + (sbyte)p.Data.Payload[0]);
                             Packet output = new Packet(p.Data.ID, true, "MainRover");
-                            output.AppendData(UtilData.ToBytes(translate((sbyte)p.Data.Payload[0])));
+                            output.AppendData(p.Data.Payload);
                             Scarlet.Communications.Server.Send(output);
                             count = 0;
                         } 
@@ -85,20 +85,21 @@ namespace MainRover
                 } 
             }
         }
-
-        public static float translate (sbyte load)
+        /*
+        public static float translate (sbyte sign, sbyte load)
         {
-            if (load > 0)
+            float shift = 0;
+            int signMult = 0;
+            switch (sign)
             {
-                return 0.9f;
+                case -1:
+                    return ((float)UtilMain.LinearMap(load, 137, 255, -1, 0));                   
+                case 1:
+                    return ((float)UtilMain.LinearMap(load, 0, 120, 0, 1));
             }
-            else if (load < 0)
-            {
-                return -0.9f;
-            }
-            return 0f;
+            return 0;
         }
-
+        */
         public static void Main(string[] args)
         {            
             ///Console.Write("Enter phone IP adress: ");

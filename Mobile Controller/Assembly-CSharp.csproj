@@ -11,7 +11,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace>
     </RootNamespace>
-    <ProjectGuid>{46F93EAB-E92D-FAB7-E605-393554190E5D}</ProjectGuid>
+    <ProjectGuid>{049E0700-AB7D-7ABA-E841-81287D39B3AD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -63,10 +63,10 @@
     <Compile Include="Assets\Virtual Joystick Pack\Scripts\Joysticks\FloatingJoystick.cs" />
     <Compile Include="Assets\Virtual Joystick Pack\Scripts\Joysticks\VariableJoystick.cs" />
     <Reference Include="UnityEditor.StandardEvents">
-      <HintPath>C:/Users/Kwong/Documents/Mobile Remote - Client/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+      <HintPath>C:/Users/Kwong/Documents/github/Rover_Controller/Mobile Controller/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>C:/Users/Kwong/Documents/Mobile Remote - Client/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>C:/Users/Kwong/Documents/github/Rover_Controller/Mobile Controller/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -261,10 +261,10 @@
       <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/VuforiaSupport/Managed/Runtime/Vuforia.UnityExtensions.dll</HintPath>
     </Reference>
     <Reference Include="BBBCSIO">
-      <HintPath>C:/Users/Kwong/Documents/Mobile Remote - Client/Assets/BBBCSIO.dll</HintPath>
+      <HintPath>C:/Users/Kwong/Documents/github/Rover_Controller/Mobile Controller/Assets/BBBCSIO.dll</HintPath>
     </Reference>
     <Reference Include="Scarlet">
-      <HintPath>C:/Users/Kwong/Documents/Mobile Remote - Client/Assets/Scarlet.dll</HintPath>
+      <HintPath>C:/Users/Kwong/Documents/github/Rover_Controller/Mobile Controller/Assets/Scarlet.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Analytics">
       <HintPath>C:/Users/Kwong/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.analytics@2.0.16/UnityEngine.Analytics.dll</HintPath>
