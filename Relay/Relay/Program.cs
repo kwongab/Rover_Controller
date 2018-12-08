@@ -9,6 +9,7 @@ using Scarlet.Utilities;
 using System.Threading;
 using System.IO.Ports;
 using System.Linq;
+using Renci.SshNet;
 
 namespace MainRover
 {
@@ -22,7 +23,33 @@ namespace MainRover
         public static SerialPort Port;
         private static string SerialPortName;
         public static int count;
-                
+        private static Thread _t1;
+
+        public static void activateBBB()
+        {
+            _t1 = new Thread(new ThreadStart(func));
+            _t1.Start();
+
+            
+        }
+
+        public static void func()
+        {
+            using (var sshc = new SshClient("192.168.0.20", "debian", "temppwd"))
+            {
+                Console.WriteLine("Connecting..");
+                sshc.Connect();
+                Console.WriteLine("Connected is" + sshc.IsConnected);
+                var cmd = sshc.RunCommand("echo \"temppwd\" | sudo -S -k bash startCan.sh");
+                var output = cmd.Result;
+                Console.WriteLine(output);
+
+                cmd = sshc.RunCommand("echo \"temppwd\" | sudo -S -k mono MainRover.exe 192.168.0.25");
+                output = cmd.Result;
+                Console.WriteLine(output);
+            }
+            Console.WriteLine("Finished starting up code on BBB");
+        }
 
         public static void SetupClient()
         {
@@ -32,6 +59,7 @@ namespace MainRover
             Packets = new QueueBuffer();
             for (byte i = 0x8E; i <= 0x99; i++)
                 Parse.SetParseHandler(i, (Packet) => Packets.Enqueue(Packet, 0));
+            Console.WriteLine("Finished starting up server on Jetson");
         }
 
         public static void ProcessInstructions()
@@ -106,6 +134,8 @@ namespace MainRover
             ///String input = Console.ReadLine();
             ///CLIENT_IP = input;
             Quit = false;
+            activateBBB();
+            Thread.Sleep(100);
             SetupClient();
             do
             {
