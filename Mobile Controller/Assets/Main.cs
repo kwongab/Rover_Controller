@@ -120,8 +120,7 @@ public class Main : MonoBehaviour
 
             Packet SkidFrontRight = new Packet(0x90, true, "MainRover");
             SkidFrontRight.AppendData(UtilData.ToBytes((sbyte)System.Math.Round((skidDriveSpeed - skidSteerSpeed) * 60)));
-            //SkidFrontRight.AppendData(UtilData.ToBytes((sbyte)Math.Round((skidDriveSpeed) * 120)));
-            //Debug.Log((sbyte)SkidFrontRight.Data.Payload[0] + " " + SkidFrontRight.Data.Payload[1]);
+            //SkidFrontRight.AppendData(UtilData.ToBytes((sbyte)Math.Round((skidDriveSpeed) * 120)));           
             Scarlet.Communications.Client.Send(SkidFrontRight);
 
             Packet SkidRearRight = new Packet(0x92, true, "MainRover");
@@ -131,6 +130,7 @@ public class Main : MonoBehaviour
             Packet SkidFrontLeft = new Packet(0x91, true, "MainRover");
             SkidFrontLeft.AppendData(UtilData.ToBytes((sbyte)Math.Round((skidDriveSpeed + skidSteerSpeed) * 60)));
             Scarlet.Communications.Client.Send(SkidFrontLeft);
+            //Debug.Log(SkidFrontLeft.Data.Payload[0] + " " + SkidFrontLeft.Data.Payload[1]);
 
             Packet SkidRearLeft = new Packet(0x93, true, "MainRover");
             SkidRearLeft.AppendData(UtilData.ToBytes((sbyte)Math.Round((0 - skidDriveSpeed - skidSteerSpeed) * 60)));

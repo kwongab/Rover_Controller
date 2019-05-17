@@ -57,7 +57,7 @@ namespace MainRover
             ///Client.Start(CLIENT_IP, 1025, 1026, "MainRover", OperationPeriod: 5);
             Server.Start(1025, 1026, OperationPeriod: 5);
             Packets = new QueueBuffer();
-            for (byte i = 0x8E; i <= 0x99; i++)
+            for (byte i = 0x8E; i <= 0xA1; i++)
                 Parse.SetParseHandler(i, (Packet) => Packets.Enqueue(Packet, 0));
             Console.WriteLine("Finished starting up server on Jetson");
         }
@@ -69,7 +69,15 @@ namespace MainRover
             {
                 Packet p = Packets.Dequeue();
                 count++;
-                
+                if (count == 5)
+                {
+                    Console.WriteLine("motor Id" + MotorID + "data is " + (sbyte)p.Data.Payload[0]);
+                    Packet output = new Packet(p.Data.ID, true, "MainRover");
+                    output.AppendData(p.Data.Payload);
+                    Scarlet.Communications.Server.Send(output);
+                    count = 0;
+                } 
+				/*
                 switch ((PacketID)p.Data.ID)
                 {
                     case PacketID.RPMAllDriveMotors:
@@ -87,7 +95,7 @@ namespace MainRover
                         {
                             sign = -1;
                         }
-                        Console.WriteLine("motor Id" + MotorID + "data is " + sign * (sbyte)p.Data.Payload[0]);      */  
+                        Console.WriteLine("motor Id" + MotorID + "data is " + sign * (sbyte)p.Data.Payload[0]);        
                         if (count == 5)
                         {
                             Console.WriteLine("motor Id" + MotorID + "data is " + (sbyte)p.Data.Payload[0]);
@@ -109,10 +117,10 @@ namespace MainRover
                         
                         break;
                     
-                        
+                 
                 } 
-            }
-        }
+			}*/
+			}
         /*
         public static float translate (sbyte sign, sbyte load)
         {
@@ -125,9 +133,9 @@ namespace MainRover
                 case 1:
                     return ((float)UtilMain.LinearMap(load, 0, 120, 0, 1));
             }
-            return 0;
+            return 0; */
         }
-        */
+        
         public static void Main(string[] args)
         {            
             ///Console.Write("Enter phone IP adress: ");
