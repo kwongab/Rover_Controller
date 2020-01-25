@@ -12,6 +12,14 @@ namespace MainRover
         SteerPosition = 0x94,
         SpeedAllDriveMotors = 0x95,
 
+        BaseSpeed = 0x9A,
+        ShoulderSpeed = 0x9B,
+        ElbowSpeed = 0x9C,
+        WristSpeed = 0x9D,
+        DifferentialVert = 0x9E,
+        DifferentialRotate = 0x9F,
+        HandGrip = 0xA0,
+
         DataGPS = 0xC0,
         DataMagnetometer = 0xC1,
 

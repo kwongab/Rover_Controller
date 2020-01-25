@@ -241,7 +241,7 @@ PlayerSettings:
   AndroidTargetArchitectures: 1
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: C:/Users/Kwong/Documents/github/Rover_Controller/Mobile Controller/user.keystore
+  AndroidKeystoreName: C:/Users/Kwong/Documents/github/Rover_Controller/Mobile Controller2/user.keystore
   AndroidKeyaliasName: abk
   AndroidTVCompatibility: 1
   AndroidIsGame: 1

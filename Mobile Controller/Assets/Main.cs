@@ -31,6 +31,19 @@ public class Main : MonoBehaviour
     public Button startRover2;
     public Text roverStartText2;
 
+    public Joystick base_;
+    public Joystick shoulder;
+    public Joystick elbow;
+    public Joystick wrist;
+    public Joystick differential;
+    public Joystick hand;
+
+    public Joystick base_H;
+    public Joystick shoulder_H;
+    public Joystick elbow_H;
+    public Joystick wrist_H;
+    public Joystick differential_H;
+    public Joystick hand_H;
 
     private bool useLandscape;
     private bool useSingleJoystick;
@@ -88,57 +101,121 @@ public class Main : MonoBehaviour
     void Update()
     {
         updateConnectionUI();
+        Debug.Log("Called update");
 
-        float skidSteerSpeed;
-        float skidDriveSpeed;
-
-        if (useLandscape)
-        {
-            skidSteerSpeed = -left2.Vertical;
-            skidDriveSpeed = right2.Horizontal;            
-        }
-        else if (!useSingleJoystick)
-        {
-            skidSteerSpeed = left.Horizontal;
-            skidDriveSpeed = right.Vertical;
-        }
-        else
-        {
-            skidSteerSpeed = all.Horizontal;
-            skidDriveSpeed = all.Vertical;
-        }
-        tester.text = skidSteerSpeed + " " + skidDriveSpeed;
-
-        if (debug)
-        {
-            Debug.Log("turn = " + skidSteerSpeed);
-            Debug.Log("drive = " + skidDriveSpeed);
-        }
         count++;
         if (count == 5)
         {
-
-            Packet SkidFrontRight = new Packet(0x90, true, "MainRover");
-            SkidFrontRight.AppendData(UtilData.ToBytes((sbyte)System.Math.Round((skidDriveSpeed - skidSteerSpeed) * 60)));
-            //SkidFrontRight.AppendData(UtilData.ToBytes((sbyte)Math.Round((skidDriveSpeed) * 120)));           
-            Scarlet.Communications.Client.Send(SkidFrontRight);
-
-            Packet SkidRearRight = new Packet(0x92, true, "MainRover");
-            SkidRearRight.AppendData(UtilData.ToBytes((sbyte)Math.Round((skidDriveSpeed - skidSteerSpeed) * 60)));
-            Scarlet.Communications.Client.Send(SkidRearRight);
-
-            Packet SkidFrontLeft = new Packet(0x91, true, "MainRover");
-            SkidFrontLeft.AppendData(UtilData.ToBytes((sbyte)Math.Round((skidDriveSpeed + skidSteerSpeed) * 60)));
-            Scarlet.Communications.Client.Send(SkidFrontLeft);
-            //Debug.Log(SkidFrontLeft.Data.Payload[0] + " " + SkidFrontLeft.Data.Payload[1]);
-
-            Packet SkidRearLeft = new Packet(0x93, true, "MainRover");
-            SkidRearLeft.AppendData(UtilData.ToBytes((sbyte)Math.Round((0 - skidDriveSpeed - skidSteerSpeed) * 60)));
-            //Console.WriteLine("Test " + (-skidDriveSpeed - skidSteerSpeed));
-            Scarlet.Communications.Client.Send(SkidRearLeft);
             count = 0;
-        }
+            float skidSteerSpeed = 0;
+            float skidDriveSpeed = 0;
 
+            short fingerSpeed = 0;
+            short diffVertShort = 0;
+            short diffHorzShort = 0;
+            short wristArmSpeed = 0;
+            short elbowArmSpeed = 0;
+            short shoulderArmSpeed = 0;
+            short baseArmSpeed = 0;
+
+            if (useLandscape)
+            {
+                skidSteerSpeed = -left2.Vertical;
+                skidDriveSpeed = right2.Horizontal;
+
+                fingerSpeed = (short)(-hand_H.Vertical * 128);
+                diffVertShort = (short)(differential_H.Horizontal * 128);
+                diffHorzShort = (short)(-differential_H.Vertical * 128);
+                wristArmSpeed = (short)(-wrist_H.Vertical * 64);
+                elbowArmSpeed = (short)(elbow_H.Horizontal * 64);
+                shoulderArmSpeed = (short)(-shoulder_H.Horizontal * 94);
+                baseArmSpeed = (short)(base_H.Vertical * 64);
+            }
+            else if (!useSingleJoystick)
+            {
+                skidSteerSpeed = left.Horizontal;
+                skidDriveSpeed = right.Vertical;
+
+                fingerSpeed = (short)(hand.Horizontal * 128);
+                diffVertShort = (short)(differential.Vertical * 128);
+                diffHorzShort = (short)(differential.Horizontal * 128);
+                wristArmSpeed = (short)(wrist.Horizontal * 64);
+                elbowArmSpeed = (short)(elbow.Vertical * 64);
+                shoulderArmSpeed = (short)(-shoulder.Vertical * 94);
+                baseArmSpeed = (short)(-base_.Horizontal * 64);
+            }
+            else
+            {
+                skidSteerSpeed = all.Horizontal;
+                skidDriveSpeed = all.Vertical;
+
+                fingerSpeed = (short)(hand.Horizontal * 128);
+                diffVertShort = (short)(differential.Vertical * 128);
+                diffHorzShort = (short)(differential.Horizontal * 128);
+                wristArmSpeed = (short)(wrist.Horizontal * 64);
+                elbowArmSpeed = (short)(elbow.Vertical * 64);
+                shoulderArmSpeed = (short)(-shoulder.Vertical * 94);
+                baseArmSpeed = (short)(-base_.Horizontal * 64);
+            }
+            tester.text = skidSteerSpeed + " " + skidDriveSpeed;
+
+            if (debug)
+            {
+                Debug.Log("turn = " + skidSteerSpeed);
+                Debug.Log("drive = " + skidDriveSpeed);
+            }
+
+            if (Client.IsConnected)
+            {
+                Packet SkidFrontRight = new Packet(0x90, true, "MainRover");
+                SkidFrontRight.AppendData(UtilData.ToBytes((sbyte)System.Math.Round((skidDriveSpeed - skidSteerSpeed) * 60)));
+                //SkidFrontRight.AppendData(UtilData.ToBytes((sbyte)Math.Round((skidDriveSpeed) * 120)));           
+                Scarlet.Communications.Client.Send(SkidFrontRight);
+
+                Packet SkidRearRight = new Packet(0x92, true, "MainRover");
+                SkidRearRight.AppendData(UtilData.ToBytes((sbyte)Math.Round((skidDriveSpeed - skidSteerSpeed) * 60)));
+                Scarlet.Communications.Client.Send(SkidRearRight);
+
+                Packet SkidFrontLeft = new Packet(0x91, true, "MainRover");
+                SkidFrontLeft.AppendData(UtilData.ToBytes((sbyte)Math.Round((skidDriveSpeed + skidSteerSpeed) * 60)));
+                Scarlet.Communications.Client.Send(SkidFrontLeft);
+                //Debug.Log(SkidFrontLeft.Data.Payload[0] + " " + SkidFrontLeft.Data.Payload[1]);
+
+                Packet SkidRearLeft = new Packet(0x93, true, "MainRover");
+                SkidRearLeft.AppendData(UtilData.ToBytes((sbyte)Math.Round((0 - skidDriveSpeed - skidSteerSpeed) * 60)));
+                //Console.WriteLine("Test " + (-skidDriveSpeed - skidSteerSpeed));
+                Scarlet.Communications.Client.Send(SkidRearLeft);
+
+                Packet FingerPack = new Packet(0xA0, true, "MainArm");
+                FingerPack.AppendData(UtilData.ToBytes(fingerSpeed));
+                Scarlet.Communications.Client.Send(FingerPack);
+
+                Packet DiffHorzPack = new Packet(0x9F, true, "MainArm");
+                DiffHorzPack.AppendData(UtilData.ToBytes((short)(-diffVertShort + diffHorzShort)));
+                Scarlet.Communications.Client.Send(DiffHorzPack);
+
+                Packet DiffVertPack = new Packet(0x9E, true, "MainArm");
+                DiffVertPack.AppendData(UtilData.ToBytes((short)(diffVertShort + diffHorzShort)));
+                Scarlet.Communications.Client.Send(DiffVertPack);
+
+                Packet WristPack = new Packet(0x9D, true, "MainArm");
+                WristPack.AppendData(UtilData.ToBytes(wristArmSpeed));
+                Scarlet.Communications.Client.Send(WristPack);
+
+                Packet ElbowPack = new Packet(0x9C, true, "MainArm");
+                ElbowPack.AppendData(UtilData.ToBytes(elbowArmSpeed));
+                Scarlet.Communications.Client.Send(ElbowPack);
+
+                Packet ShoulderPack = new Packet(0x9B, true, "MainArm");
+                ShoulderPack.AppendData(UtilData.ToBytes(shoulderArmSpeed));
+                Scarlet.Communications.Client.Send(ShoulderPack);
+
+                Packet BasePack = new Packet(0x9A, true, "MainArm");
+                BasePack.AppendData(UtilData.ToBytes(baseArmSpeed));
+                Scarlet.Communications.Client.Send(BasePack);
+            
+            }
+        }
     }
 
     public void switchJoystickType(bool value)
